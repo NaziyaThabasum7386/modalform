@@ -99,7 +99,7 @@ function App() {
     <div className="modal">
       <div className="modal-content">
         <h1>User Details Model</h1>
-        <button onClick={handleClick}>Open Form</button>
+        <button id="open-form-button" onClick={handleClick}>Open Form</button>
         {form && 
         <form ref={formRef} onSubmit={handleSubmit} className="centered-form" style={{height: "500px", width: "400px", backgroundColor: "white" , borderRadius: "5px" }}>
           
