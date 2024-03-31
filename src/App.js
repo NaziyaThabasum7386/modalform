@@ -55,14 +55,17 @@ function App() {
     event.preventDefault();
 
     if (username.trim() === '' || email.trim() === '' || number.trim() === '' || dob.trim() === '') {
-      alert('Please fill out all fields');
+      enqueueSnackbar('Please fill out all fields', { variant: 'warning' });
+     // alert("Please fill out all fields");
       return;
     } 
     
     if (!email.includes('@')) {
-      alert('Invalid email. Please check your email address.');
+      enqueueSnackbar(`Please include an "@" in the email address. "${email}" is missing an "@"`, { variant: 'warning' });
+      alert(`Please include an "@" in the email address. "${email}" is missing an "@"`);
       return;
     }
+
 
     if (number.trim().length !== 10 || isNaN(number)) {
       alert('Invalid phone number. Please enter a 10-digit phone number.');
@@ -99,7 +102,7 @@ function App() {
     <div className="modal">
       <div className="modal-content">
         <h1>User Details Model</h1>
-        <button id="open-form-button" onClick={handleClick}>Open Form</button>
+        <button onClick={handleClick}>Open Form</button>
         {form && 
         <form ref={formRef} onSubmit={handleSubmit} className="centered-form" style={{height: "500px", width: "400px", backgroundColor: "white" , borderRadius: "5px" }}>
           
@@ -113,7 +116,7 @@ function App() {
             />
             <h2>Email Address:</h2>
             <input
-              type="text"
+              type="email"
               id="email"
               value={email}
               onChange={handleInputChange}
