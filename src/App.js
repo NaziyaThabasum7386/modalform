@@ -42,8 +42,10 @@ function App() {
   }, [form]);
 
   const handleClick = () => {
-    setForm(true);
-    document.body.style.backgroundColor = "rgba(0, 0, 0, 0.5)"; // Darken background
+    if (!form) {
+      setForm(true);
+      document.body.style.backgroundColor = "rgba(0, 0, 0, 0.5)"; // Darken background
+    }
   };
 
   const handleDateChange = (date) => {
@@ -99,7 +101,7 @@ function App() {
     <div className="modal">
       <div className="modal-content">
         <h1>User Details Model</h1>
-        <button onClick={handleClick}>Open Form</button>
+        <button onClick={handleClick} disabled={form}>Open Form</button>
         {form && 
         <form ref={formRef} onSubmit={handleSubmit} className="centered-form" style={{height: "500px", width: "400px", backgroundColor: "white" , borderRadius: "5px" }}>
           
