@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { SnackbarProvider, useSnackbar } from 'notistack';
 import './App.css';
 
@@ -56,19 +56,16 @@ function App() {
 
     if (username.trim() === '' || email.trim() === '' || number.trim() === '' || dob.trim() === '') {
       enqueueSnackbar('Please fill out all fields', { variant: 'warning' });
-     // alert("Please fill out all fields");
       return;
     } 
     
     if (!email.includes('@')) {
       enqueueSnackbar(`Please include an "@" in the email address. "${email}" is missing an "@"`, { variant: 'warning' });
-      alert(`Please include an "@" in the email address. "${email}" is missing an "@"`);
       return;
     }
 
-
     if (number.trim().length !== 10 || isNaN(number)) {
-      alert('Invalid phone number. Please enter a 10-digit phone number.');
+      enqueueSnackbar('Invalid phone number. Please enter a 10-digit phone number.', { variant: 'warning' });
       return;
     }
     
