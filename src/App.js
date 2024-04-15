@@ -20,28 +20,24 @@ function App() {
   const [dob, setDob] = useState("");
   const [form, setForm] = useState(false);
   const { enqueueSnackbar } = useSnackbar(); // Destructure enqueueSnackbar function
-  const formRef = useRef(null);
-  const clickOutsideListenerRef = useRef(null); // Ref to store click outside listener
+  const modalRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (formRef.current && !formRef.current.contains(event.target)) {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
         setForm(false);
         document.body.style.backgroundColor = ""; // Reset background color
       }
     };
 
-    clickOutsideListenerRef.current = handleClickOutside; // Store the listener in ref
-
     if (form) {
-      document.addEventListener('mousedown', clickOutsideListenerRef.current);
+      document.addEventListener('mousedown', handleClickOutside);
     } else {
-      document.removeEventListener('mousedown', clickOutsideListenerRef.current);
+      document.removeEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
-      // Ensure proper cleanup by removing the correct listener
-      document.removeEventListener('mousedown', clickOutsideListenerRef.current);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [form]);
 
@@ -105,10 +101,10 @@ function App() {
     <div>
       <h1>User Details Model</h1>
       <button onClick={handleClick} disabled={form}>Open Form</button>
-      <div className="modal">
-        {form && 
-          <div className="modal-content">
-            <form ref={formRef} onSubmit={handleSubmit} className="centered-form" style={{height: "500px", width: "400px", backgroundColor: "white" , borderRadius: "5px" }}>
+      {form && 
+        <div className="modal" ref={modalRef}>
+          <div className="modal-content" style={{height: "500px", width: "400px", backgroundColor: "white" , borderRadius: "5px" }}>
+            <form onSubmit={handleSubmit} className="centered-form">
               <h4>Fill Details</h4>
               <h2>Username:</h2>
               <input
@@ -137,8 +133,8 @@ function App() {
               <button className="submit-button" type="submit">Submit</button>
             </form>
           </div>
-        }
-      </div>
+        </div>
+      }
     </div>
   );
 }
