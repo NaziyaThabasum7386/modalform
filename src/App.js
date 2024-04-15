@@ -21,6 +21,7 @@ function App() {
   const [form, setForm] = useState(false);
   const { enqueueSnackbar } = useSnackbar(); // Destructure enqueueSnackbar function
   const formRef = useRef(null);
+  const clickOutsideListenerRef = useRef(null); // Ref to store click outside listener
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -30,14 +31,17 @@ function App() {
       }
     };
 
+    clickOutsideListenerRef.current = handleClickOutside; // Store the listener in ref
+
     if (form) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('mousedown', clickOutsideListenerRef.current);
     } else {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', clickOutsideListenerRef.current);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      // Ensure proper cleanup by removing the correct listener
+      document.removeEventListener('mousedown', clickOutsideListenerRef.current);
     };
   }, [form]);
 
@@ -100,42 +104,41 @@ function App() {
   return (
     <div>
       <h1>User Details Model</h1>
-        <button onClick={handleClick} disabled={form}>Open Form</button>
-    <div className="modal">
-      <div className="modal-content">
+      <button onClick={handleClick} disabled={form}>Open Form</button>
+      <div className="modal">
         {form && 
-        <form ref={formRef} onSubmit={handleSubmit} className="centered-form" style={{height: "500px", width: "400px", backgroundColor: "white" , borderRadius: "5px" }}>
-          
-            <h4>Fill Details</h4>
-            <h2>Username:</h2>
-            <input
-              type="text"
-              id="username"
-              value={username}
-              onChange={handleInputChange}
-            />
-            <h2>Email Address:</h2>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={handleInputChange}
-            />
-            <h2>Phone Number:</h2>
-            <input
-              type="text"
-              id="phone"
-              value={number}
-              onChange={handleInputChange}
-            />
-            <h2>Date of Birth:</h2>
-            <DatePicker selectedDate={dob} onChange={handleDateChange} />
-            <br/>
-            <button className="submit-button" type="submit">Submit</button>
-          </form>
+          <div className="modal-content">
+            <form ref={formRef} onSubmit={handleSubmit} className="centered-form" style={{height: "500px", width: "400px", backgroundColor: "white" , borderRadius: "5px" }}>
+              <h4>Fill Details</h4>
+              <h2>Username:</h2>
+              <input
+                type="text"
+                id="username"
+                value={username}
+                onChange={handleInputChange}
+              />
+              <h2>Email Address:</h2>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={handleInputChange}
+              />
+              <h2>Phone Number:</h2>
+              <input
+                type="text"
+                id="phone"
+                value={number}
+                onChange={handleInputChange}
+              />
+              <h2>Date of Birth:</h2>
+              <DatePicker selectedDate={dob} onChange={handleDateChange} />
+              <br/>
+              <button className="submit-button" type="submit">Submit</button>
+            </form>
+          </div>
         }
       </div>
-    </div>
     </div>
   );
 }
